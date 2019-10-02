@@ -7,7 +7,7 @@ var axios = require("axios");
 var cheerio = require("cheerio");
 
 // Ensuring that all models are required
-//var db = require("./models");
+var db = require("./models");
 
 // Sets a port for the app to be accessed on
 var PORT = process.env.PORT || 3000;
