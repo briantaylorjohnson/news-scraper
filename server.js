@@ -28,6 +28,41 @@ app.use(express.static("public"));
 // Connect to the locally hosted MongoDB instance (or the one on Heroku when deployed)
 mongoose.connect("mongodb://127.0.0.1:27017/news-scraper", { useNewUrlParser: true });
 
+// Server API routing
+// GET request for scraping news
+app.get("/scrapenews", function(req, res)
+{
+
+    axios.get("https://sports.theonion.com").then(function(response)
+    {
+        var $ = cheerio.load(response.data);
+
+        $(".cw4lnv-5").each(function(i, element)
+        {
+            var result = {};
+
+            result.title = $(this).find("h1.cw4lnv-6").text();
+
+            console.log("\n" + $(this).find("h1.cw4lnv-6").text());
+
+            result.link = $(this).children("a").attr("href");
+
+            console.log($(this).children("a").attr("href") + "\n");
+
+            
+            db.Article.create(result).then(function(dbArticle)
+            {
+                console.log(dbArticle);
+            }).catch(function(err)
+            {
+                console.log(err);
+            });
+            
+        });
+
+        res.send("Success!");
+    });
+});
 
 // This will start the server
 app.listen(PORT, function()
