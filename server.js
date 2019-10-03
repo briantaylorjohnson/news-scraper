@@ -26,11 +26,11 @@ app.use(express.json());
 app.use(express.static("public"));
 
 // Connect to the locally hosted MongoDB instance (or the one on Heroku when deployed)
-mongoose.connect("mongodb://127.0.0.1:27017/news-scraper", { useNewUrlParser: true });
+mongoose.connect("mongodb://127.0.0.1:27017/news-scraper", { useNewUrlParser: true, useUnifiedTopology: true });
 
 // Server API routing
 // GET request for scraping news
-app.get("/scrapenews", function(req, res)
+app.get("/scrape_news", function(req, res)
 {
 
     axios.get("https://sports.theonion.com").then(function(response)
@@ -53,7 +53,8 @@ app.get("/scrapenews", function(req, res)
             db.Article.create(result).then(function(dbArticle)
             {
                 console.log(dbArticle);
-            }).catch(function(err)
+            })
+            .catch(function(err)
             {
                 console.log(err);
             });
@@ -61,6 +62,19 @@ app.get("/scrapenews", function(req, res)
         });
 
         res.send("Success!");
+    });
+});
+
+// GET request to retrieve articles stored in the database
+app.get("/fetch_articles", function(req, res)
+{
+    db.Article.find().then(function(dbArticles)
+    {
+        res.json(dbArticles);
+    })
+    .catch(function(err)
+    {
+        res.json(err);
     });
 });
 
