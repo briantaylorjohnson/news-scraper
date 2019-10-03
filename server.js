@@ -78,6 +78,42 @@ app.get("/fetch_articles", function(req, res)
     });
 });
 
+// GET request to retreive notes for a specific article
+app.get("/fetch_notes/:id", function(req, res)
+{
+    db.Note.find({article: req.params.id}).then(function(getNotes)
+    {
+        res.json(getNotes);
+    }).catch(function(err)
+    {
+        res.json(err);
+    });
+});
+
+// POST request to post a note for a specific article
+app.post("/post_note", function(req, res)
+{
+    db.Note.create(req.body).then(function(postNote){}).then(function(postNote)
+    {
+        res.json("Note successfully posted!");
+    }).catch(function(err)
+    {
+        res.json(err);
+    });
+});
+
+// POST request to delete a note for a specific article
+app.post("/delete_note/:id", function(req, res)
+{
+    db.Note.deleteOne({_id: req.params.id}).then(function(deleteNote)
+    {
+        res.json("Note deleted successfully!");
+    }).catch(function(err)
+    {
+        res.json(err);
+    });
+});
+
 // This will start the server
 app.listen(PORT, function()
 {
