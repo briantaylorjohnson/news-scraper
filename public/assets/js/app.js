@@ -1,4 +1,7 @@
-
+$.get("/scrape_news", function(news)
+{    
+    console.log(news);
+});
 
 $.getJSON("/fetch_articles", function(data)
 {
