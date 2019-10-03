@@ -26,7 +26,8 @@ app.use(express.json());
 app.use(express.static("public"));
 
 // Connect to the locally hosted MongoDB instance (or the one on Heroku when deployed)
-mongoose.connect("mongodb://127.0.0.1:27017/news-scraper", { useNewUrlParser: true, useUnifiedTopology: true });
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/news-scraper"
+mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 // Server API routing
 // GET request for scraping news
